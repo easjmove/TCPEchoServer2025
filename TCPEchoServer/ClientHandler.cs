@@ -15,11 +15,25 @@ namespace TCPEchoServer
             StreamReader reader = new StreamReader(ns);
             StreamWriter writer = new StreamWriter(ns);
 
-            string? message = reader.ReadLine();
-            Console.WriteLine(message);
-            writer.WriteLine(message);
-            writer.Flush();
+            bool isRunning = true;
 
+            while (isRunning)
+            {
+                string? message = reader.ReadLine();
+                Console.WriteLine(message);
+                if (message == "time")
+                {
+                    writer.WriteLine(DateTime.Now.ToString("dd/MM/yy - HH:mm"));
+                    writer.Flush();
+                }
+                else if (message == "close")
+                {
+                    writer.WriteLine("connection closed");
+                    writer.Flush();
+                    isRunning = false;
+                }
+
+            }
             client.Close();
         }
     }
